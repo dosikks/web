@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💖 Валентинка</title>
+    <style>
+        :root {
+            --bg: #ffd6e7;
+            --card: rgba(255, 255, 255, 0.65);
+            --text: #2b2b2b;
+            --yes: #ff4d88;
+            --no: #6b6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at top, #ffe3ef 0%, var(--bg) 55%, #ffc7de 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .card {
+            width: min(520px, 92vw);
+            padding: 28px 22px;
+            border-radius: 26px;
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0 0 14px;
+            font-size: clamp(22px, 4vw, 32px);
+            line-height: 1.15;
+        }
+
+        p {
+            margin: 0 0 22px;
+            opacity: 0.85;
+            font-size: 16px;
+        }
+
+        .buttons {
+            position: relative;
+            height: 120px;
+            /* место чтобы "Нет" мог прыгать */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-size: 18px;
+            font-weight: 700;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            user-select: none;
+        }
+
+        #yesBtn {
+            background: var(--yes);
+            color: white;
+            min-width: 140px;
+            transform: scale(1);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.03);
+        }
+
+        #noBtn {
+            background: #ffffff;
+            color: #333;
+            min-width: 120px;
+            position: absolute;
+            right: 0;
+            transform: translateX(-10px);
+        }
+
+        #noBtn:hover {
+            transform: scale(1.02);
+        }
+
+        .final {
+            display: none;
+            margin-top: 18px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #b30047;
+        }
+
+        /* маленькие сердечки */
+        .heart {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0.85;
+            animation: floatUp 1.4s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateY(-120px) scale(1.6);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" id="card">
+        <h1 id="title">Ты будешь моей валентинкой? 💘</h1>
+        <p id="subtitle">У тебя есть только один правильный ответ 😌</p>
+
+        <div class="buttons" id="btnArea">
+            <button id="yesBtn">Да 💖</button>
+            <button id="noBtn">Нет 🙃</button>
+        </div>
+
+        <div class="final" id="finalText">
+            Урааа! 💕 Тогда жди сюрприз 😎🎁
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const btnArea = document.getElementById("btnArea");
+
+        const title = document.getElementById("title");
+        const subtitle = document.getElementById("subtitle");
+        const finalText = document.getElementById("finalText");
+
+        let noClicks = 0;
+
+        const yesTexts = [
+            "Да 💖",
+            "Точно да 😳💗",
+            "ДААА 🥹💕",
+            "Ну давай 😌💘",
+            "Не мучай меня 😭💞",
+            "ЖМИ ДА 😈💖"
+        ];
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function moveNoButton() {
+            const areaRect = btnArea.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            // ограничим движение внутри зоны
+            const maxX = areaRect.width - btnRect.width;
+            const maxY = areaRect.height - btnRect.height;
+
+            const x = randomInt(0, Math.max(0, maxX));
+            const y = randomInt(0, Math.max(0, maxY));
+
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+            noBtn.style.right = "auto";
+        }
+
+        function popHeart() {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.textContent = ["💖", "💘", "💕", "💗", "💓"][randomInt(0, 4)];
+
+            const rect = yesBtn.getBoundingClientRect();
+            heart.style.left = (rect.left + rect.width / 2) + "px";
+            heart.style.top = (rect.top + rect.height / 2) + "px";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 1400);
+        }
+
+        noBtn.addEventListener("click", () => {
+            noClicks++;
+
+            // двигаем "нет"
+            moveNoButton();
+
+            // увеличиваем "да"
+            const scale = Math.min(1 + noClicks * 0.12, 2.2);
+            yesBtn.style.transform = `scale(${scale})`;
+
+            // меняем текст кнопки "да"
+            const textIndex = Math.min(noClicks, yesTexts.length - 1);
+            yesBtn.textContent = yesTexts[textIndex];
+
+            // меняем подпись
+            if (noClicks === 1) subtitle.textContent = "Эй... так нельзя 😅";
+            if (noClicks === 3) subtitle.textContent = "Я всё равно добьюсь своего 😈";
+            if (noClicks === 6) subtitle.textContent = "У тебя больше нет выбора 😌💞";
+
+            popHeart();
+        });
+
+        yesBtn.addEventListener("click", () => {
+            title.textContent = "Я знал(а), что ты согласишься! 💞";
+            subtitle.textContent = "Теперь официально: ты моя валентинка 😌💘";
+
+            btnArea.style.display = "none";
+            finalText.style.display = "block";
+
+            // салют сердечек
+            for (let i = 0; i < 14; i++) {
+                setTimeout(popHeart, i * 90);
+            }
+        });
+
+        // стартовая позиция кнопки "нет"
+        moveNoButton();
+    </script>
+</body>
+
+</html>

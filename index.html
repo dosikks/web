@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>to my lovely Merey💖 </title>
+    <title>to my lovely Merey💖</title>
+
     <style>
         :root {
             --bg: #ffd6e7;
@@ -55,8 +56,7 @@
 
         .buttons {
             position: relative;
-            height: 120px;
-            /* место чтобы "Нет" мог прыгать */
+            height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,9 +105,9 @@
             font-size: 20px;
             font-weight: 700;
             color: #b30047;
+            white-space: pre-line;
         }
 
-        /* маленькие сердечки */
         .heart {
             position: absolute;
             font-size: 18px;
@@ -158,11 +158,15 @@
 
         let noClicks = 0;
 
+        // 10-й клик должен быть по кнопке, которая уже стала "Да"
+        const NO_TO_YES_AT = 9; // на 9-м клике превращаем
+        const FINAL_AT = 10;    // на 10-м клике показываем финал
+
         const yesTexts = [
             "Да",
             "Да, лохушка",
             "Да, Нурдос лох",
-            "Да, (Нурдос покупает много фри и наггетсов) ",
+            "Да, (Нурдос покупает много фри и наггетсов)",
             "Ну что подеелать, да",
             "ДААА!"
         ];
@@ -175,7 +179,6 @@
             const areaRect = btnArea.getBoundingClientRect();
             const btnRect = noBtn.getBoundingClientRect();
 
-            // ограничим движение внутри зоны
             const maxX = areaRect.width - btnRect.width;
             const maxY = areaRect.height - btnRect.height;
 
@@ -201,10 +204,40 @@
             setTimeout(() => heart.remove(), 1400);
         }
 
+        function showFinal() {
+            title.textContent = "урааа💘";
+            subtitle.textContent = "💘💘💘💘💘💘💘💘💘💘💘💘";
+
+            btnArea.style.display = "none";
+            finalText.style.display = "block";
+
+            for (let i = 0; i < 14; i++) {
+                setTimeout(popHeart, i * 90);
+            }
+        }
+
+        function turnNoIntoYes() {
+            noBtn.textContent = "Да 💖";
+            noBtn.style.background = "var(--yes)";
+            noBtn.style.color = "white";
+
+            // ставим в центр красиво
+            noBtn.style.left = "50%";
+            noBtn.style.top = "50%";
+            noBtn.style.right = "auto";
+            noBtn.style.transform = "translate(-50%, -50%) scale(1.08)";
+        }
+
         noBtn.addEventListener("click", () => {
             noClicks++;
 
-            // двигаем "нет"
+            // 10-й клик — уже по кнопке "Да" (бывшей "Нет") => финал
+            if (noClicks >= FINAL_AT) {
+                showFinal();
+                return;
+            }
+
+            // до финала — обычное поведение
             moveNoButton();
 
             // увеличиваем "да"
@@ -221,19 +254,16 @@
             if (noClicks === 6) subtitle.textContent = "пожалустаа😭😭😭😭😭";
 
             popHeart();
+
+            // на 9-м клике превращаем "Нет" в "Да"
+            if (noClicks === NO_TO_YES_AT) {
+                subtitle.textContent = "да";
+                turnNoIntoYes();
+            }
         });
 
         yesBtn.addEventListener("click", () => {
-            title.textContent = "урааа💘";
-            subtitle.textContent = "💘💘💘💘💘💘💘💘💘💘💘💘";
-
-            btnArea.style.display = "none";
-            finalText.style.display = "block";
-
-            // салют сердечек
-            for (let i = 0; i < 14; i++) {
-                setTimeout(popHeart, i * 90);
-            }
+            showFinal();
         });
 
         // стартовая позиция кнопки "нет"

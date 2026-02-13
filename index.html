@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>💖 Валентинка</title>
+    <title>to my lovely Merey💖 </title>
     <style>
         :root {
             --bg: #ffd6e7;
@@ -132,8 +132,8 @@
 
 <body>
     <div class="card" id="card">
-        <h1 id="title">Ты будешь моей валентинкой? 💘</h1>
-        <p id="subtitle">У тебя есть только один правильный ответ 😌</p>
+        <h1 id="title">Merey, will you be my valentine? 💘</h1>
+        <p id="subtitle">Прости пожалуйста за все, давай проведем этот день вместе 🥺</p>
 
         <div class="buttons" id="btnArea">
             <button id="yesBtn">Да 💖</button>
@@ -141,7 +141,9 @@
         </div>
 
         <div class="final" id="finalText">
-            Урааа! 💕 Тогда жди сюрприз 😎🎁
+            Время: 19:00, 14.02.2026
+            Место: ТРЦ Asia Park
+            Дресс код: повседневный, важная деталь: футболка с чек пуком💘
         </div>
     </div>
 
@@ -157,12 +159,12 @@
         let noClicks = 0;
 
         const yesTexts = [
-            "Да 💖",
-            "Точно да 😳💗",
-            "ДААА 🥹💕",
-            "Ну давай 😌💘",
-            "Не мучай меня 😭💞",
-            "ЖМИ ДА 😈💖"
+            "Да",
+            "Да, лохушка",
+            "Да, Нурдос лох",
+            "Да, (Нурдос покупает много фри и наггетсов) ",
+            "Ну что подеелать, да",
+            "ДААА!"
         ];
 
         function randomInt(min, max) {
@@ -214,16 +216,16 @@
             yesBtn.textContent = yesTexts[textIndex];
 
             // меняем подпись
-            if (noClicks === 1) subtitle.textContent = "Эй... так нельзя 😅";
-            if (noClicks === 3) subtitle.textContent = "Я всё равно добьюсь своего 😈";
-            if (noClicks === 6) subtitle.textContent = "У тебя больше нет выбора 😌💞";
+            if (noClicks === 1) subtitle.textContent = "🥺🥺🥺🥺🥺";
+            if (noClicks === 3) subtitle.textContent = "прости меня пожалуйста🥺";
+            if (noClicks === 6) subtitle.textContent = "пожалустаа😭😭😭😭😭";
 
             popHeart();
         });
 
         yesBtn.addEventListener("click", () => {
-            title.textContent = "Я знал(а), что ты согласишься! 💞";
-            subtitle.textContent = "Теперь официально: ты моя валентинка 😌💘";
+            title.textContent = "урааа💘";
+            subtitle.textContent = "💘💘💘💘💘💘💘💘💘💘💘💘";
 
             btnArea.style.display = "none";
             finalText.style.display = "block";
